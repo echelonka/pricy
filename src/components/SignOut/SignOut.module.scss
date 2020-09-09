@@ -1,0 +1,10 @@
+@import "../../assets/styles/variables";
+@import "../../assets/styles/mixins";
+
+.button {
+  font-size: 1rem;
+  padding: 0;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+}

@@ -1,0 +1,9 @@
+@import "../../assets/styles/variables";
+@import "../../assets/styles/mixins";
+
+.card {
+  padding: 1.875rem;
+  border-radius: 1.5rem;
+  position: relative;
+  @include neumorphism($color-light, false, topleft, false, 1rem);
+}

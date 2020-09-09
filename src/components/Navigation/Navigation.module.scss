@@ -1,0 +1,16 @@
+@import "../../assets/styles/variables";
+@import "../../assets/styles/mixins";
+
+.bar {
+  padding: 10px 0;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.links {
+  display: flex;
+  list-style: none;
+}

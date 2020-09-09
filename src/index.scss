@@ -1,0 +1,28 @@
+@import-normalize;
+
+@import "./assets/styles/variables";
+@import "./assets/styles/spacing";
+@import "./assets/styles/helper-classes";
+
+body {
+  margin: 0;
+  background-color: $color-light;
+  color: $color-secondary;
+  font-family: $font-base;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+button {
+  font-family: $font-base;
+  color: $color-secondary;
+}
+
+ul {
+  margin: 0;
+}

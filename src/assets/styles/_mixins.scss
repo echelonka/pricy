@@ -1,0 +1,74 @@
+@mixin desktop {
+  @media (min-width: 1200px) {
+    @content;
+  }
+}
+
+@mixin laptop {
+  @media (min-width: 1024px) {
+    @content
+  }
+}
+
+@mixin tablets {
+  @media (min-width: 768px) {
+    @content
+  }
+}
+
+@mixin phones {
+  @media (min-width: 544px) {
+    @content;
+  }
+}
+
+@mixin neumorphism(
+  $color,
+  $hover: false,
+  $direction: topleft,
+  $inset: false,
+  $distance: .1rem,
+  $border: false
+) {
+  $topX: ($distance * 2 * -1);
+  $topY: ($distance * 2 * -1);
+
+  @if $direction == 'topcenter' {
+    $topX: 0px;
+    $topY: ($distance * 2 * -1);
+  }
+  @if $direction == 'topright' {
+    $topX: ($distance * 2);
+    $topY: ($distance * 2 * -1);
+  }
+
+  $out: $topX $topY ($distance * 3) rgba(#fff, .7),
+  $topX * -1 $topY * -1 ($distance * 3) darken($color, 12),
+  inset $topX $topY ($distance * 6) rgba(#fff, .1),
+  inset $topX * -1 $topY * -1 ($distance * 6) darken($color, 0);
+
+  $in: $topX $topY ($distance * 5) rgba(#fff, .2),
+  $topX * -1 $topY * -1 ($distance * 3) darken($color, 0),
+  inset $topX $topY ($distance * 6) rgba(#fff, .6),
+  inset $topX / 2 $topY / 2 ($distance) rgba(#fff, .2),
+  inset $topX * -1 $topY * -1 ($distance * 3) darken($color, 10);
+
+  @if $inset {
+    box-shadow: $in;
+  } @else {
+    box-shadow: $out;
+  }
+
+  @if $hover {
+    transition: box-shadow .3s ease-in-out;
+    will-change: box-shadow;
+
+    &:hover {
+      @if $inset {
+        box-shadow: $out;
+      } @else {
+        box-shadow: $in;
+      }
+    }
+  }
+}

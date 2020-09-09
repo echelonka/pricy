@@ -1,0 +1,37 @@
+$spacer: 1.5rem !default;
+
+$spacers: (
+  0: 0,
+  1: $spacer * .25,
+  2: $spacer * .5,
+  3: $spacer,
+  4: $spacer * 1.5,
+  5: $spacer * 3
+);
+
+$infixes: (
+  t: 'top',
+  r: 'right',
+  b: 'bottom',
+  l: 'left'
+);
+
+@each $prop, $abbrev in (margin: m, padding: p) {
+  @each $size, $length in $spacers {
+    .#{$abbrev}-#{$size} {
+      #{$prop}: $length !important;
+    }
+
+    @each $infix, $side in $infixes {
+      .#{$abbrev}#{$infix}-#{$size} {
+        #{$prop}-#{$side}: $length !important;
+      }
+    }
+  }
+}
+
+@each $infix, $side in $infixes {
+  .m#{$infix}-auto {
+    margin-#{$side}: auto;
+  }
+}

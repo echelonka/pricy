@@ -1,0 +1,18 @@
+@import "../../assets/styles/mixins";
+
+.Container {
+  width: calc(100vw - 30px);
+  margin: 0 auto;
+
+  @include phones() {
+    width: 33.75rem;
+  }
+
+  @include laptop() {
+    width: 60rem;
+  }
+
+  @include desktop() {
+    width: 71.25rem;
+  }
+}
