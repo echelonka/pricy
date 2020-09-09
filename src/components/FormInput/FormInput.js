@@ -4,13 +4,20 @@ import classnames from 'classnames'
 import styles from './FormInput.module.scss'
 
 const FormInput = props => {
-  const {className, onChange, success, error, ...attrs} = props
-  const classNames = classnames(
+  const {className, onChange, ...attrs} = props
+  const containerClassNames = classnames(
+    styles.container,
     className,
+  )
+  const inputClassNames = classnames(
     styles.input,
   )
 
-  return <input {...attrs} onChange={onChange} className={classNames} />
+  return (
+    <div className={containerClassNames}>
+      <input {...attrs} onChange={onChange} className={inputClassNames} />
+    </div>
+  )
 }
 
 FormInput.propTypes = {

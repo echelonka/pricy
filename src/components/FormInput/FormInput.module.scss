@@ -10,19 +10,44 @@ $input-focus-border-color: $color-primary;
 $input-placeholder-color: $gray-600;
 $input-hover-border-color: darken($input-border-color, 15);
 
+.container {
+  width: calc(100% - 4px);
+  position: relative;
+
+  &::before, &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: $input-border-radius;
+    z-index: -1;
+  }
+
+  &::before {
+    margin: -2px;
+    background: linear-gradient(145deg, $white 20%, #D0D9E2);
+  }
+
+  &::after {
+    margin: -1px;
+    background-color: $color-light;
+  }
+}
+
 .input {
   width: 100%;
-  display: block;
   padding: .5rem 1rem;
+  display: block;
   font-size: $input-font-size;
-  background-color: rgba($white, .25);
-  border: none;
-  border-radius: $input-border-radius;
-  transition: box-shadow $transition-duration $ease-in-out-circ, border $transition-duration $ease-in-out-circ;
+  box-sizing: border-box;
   outline: none;
   color: $input-color;
-  will-change: border-color, box-shadow;
-  box-sizing: border-box;
+  border: none;
+  border-radius: $input-border-radius;
+  background-color: darken($color-light, 2);
   line-height: 1.5;
   @include neumorphism($color-light, false, topleft, true);
 

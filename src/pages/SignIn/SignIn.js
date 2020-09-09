@@ -53,7 +53,6 @@ const SignInFormBase = props => {
         placeholder={'Password'}
         type={'password'}
         value={password}
-        error
       />
       {error && <p className={'text-error'}>{error.message}</p>}
       <Button
