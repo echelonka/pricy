@@ -1,33 +1,45 @@
 @import "../../assets/styles/variables";
+@import "../../assets/styles/mixins";
 
 $button-colors: (
   primary: $color-primary,
   success: $color-success,
 );
 $button-font-size: .875rem;
+$button-font-size-active: .87rem;
 
 .button {
+  padding: .1rem;
   font-weight: 500;
+  font-size: $button-font-size;
+  font-family: Poppins, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  cursor: pointer;
   border-radius: $border-radius;
   border: none;
-  font-family: Poppins, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  padding: .75rem 1.25rem;
-  font-size: $button-font-size;
   line-height: 1.125;
-  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
   outline: none;
-  transition: $transition-base;
-  will-change: box-shadow, background-color, opacity;
-  box-shadow: 0 .313rem .719rem #c6c9cb, 0 -.313rem .719rem $white;
+  user-select: none;
+  color: $gray-700;
   letter-spacing: .05rem;
+  background-color: $color-light;
+  transition: $transition-base;
+  will-change: box-shadow, opacity;
+  @include neumorphism($color-light);
 
-  &:hover:not(:disabled) {
-    box-shadow: 0 .313rem .719rem rgba($color-dark, .1), 0 .156rem .125rem rgba($black, .06);
-  }
-  
   &:disabled {
-    cursor: not-allowed;
+    cursor: default;
+    box-shadow: none;
     opacity: .65;
+    background-color: darken($color-light, 4);
+  }
+
+  &:active:not(:disabled) {
+    font-size: $button-font-size-active;
+
+    .inner {
+      @include neumorphism($color-light, false, topleft, true);
+    }
   }
 }
 
@@ -36,17 +48,26 @@ $button-font-size: .875rem;
   display: block;
 }
 
+.inner {
+  width: 100%;
+  height: 100%;
+  padding: .75rem 1.25rem;
+  border-radius: $border-radius;
+  box-sizing: border-box;
+  transition: $transition-base;
+  will-change: box-shadow, font-size;
+}
+
 @each $color-name, $color-value in $button-colors {
   .#{$color-name} {
-    background: linear-gradient(145deg, rgba($color-value, .75), rgba(#15b266, .75) 70%, #15b266 90%);
-    color: darken($color-value, 15);
+    color: $color-light;
+    background: linear-gradient(145deg, mix($color-value, $color-light, 70) 20%, $color-value);
+    @include neumorphism($color-value);
 
-    &:hover:not(:disabled) {
-      background-color: darken($color-value, 2);
-    }
-
-    &:active {
-      background-color: darken($color-value, 5);
+    &:active:not(:disabled) {
+      .inner {
+        @include neumorphism($color-value, false, topleft, true);
+      }
     }
   }
 }

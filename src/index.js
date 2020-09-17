@@ -5,14 +5,25 @@ import App from './pages/App'
 import Firebase, {FirebaseContext} from './components/Firebase'
 import * as serviceWorker from './serviceWorker'
 
-ReactDOM.render(
-  <React.StrictMode>
-    <FirebaseContext.Provider value={new Firebase()}>
-      <App/>
-    </FirebaseContext.Provider>
-  </React.StrictMode>,
-  document.getElementById('root')
-)
+const render = Component => {
+  return ReactDOM.render(
+    <React.StrictMode>
+      <FirebaseContext.Provider value={new Firebase()}>
+        <Component/>
+      </FirebaseContext.Provider>
+    </React.StrictMode>,
+    document.getElementById('root')
+  )
+}
+
+render(App)
+
+if (module.hot) {
+  module.hot.accept('./pages/App', () => {
+    const NextApp = require('./pages/App').default
+    render(NextApp)
+  })
+}
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

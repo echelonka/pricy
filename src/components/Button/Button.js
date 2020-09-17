@@ -9,11 +9,15 @@ const Button = props => {
     className,
     styles.button,
     block && styles.block,
-    color && styles[color]
+    color && styles[color],
   )
 
   return (
-    <button {...attrs} className={classNames}>{children}</button>
+    <button {...attrs} className={classNames}>
+      <div className={styles.inner}>
+        {children}
+      </div>
+    </button>
   )
 }
 
@@ -27,8 +31,8 @@ Button.propTypes = {
     'error',
     'warning',
     'light',
-    'dark'
-  ])
+    'dark',
+  ]),
 }
 
 export default Button

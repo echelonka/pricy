@@ -45,12 +45,12 @@
   $out: $topX $topY ($distance * 3) rgba(#fff, .7),
   $topX * -1 $topY * -1 ($distance * 3) darken($color, 12),
   inset $topX $topY ($distance * 6) rgba(#fff, .1),
-  inset $topX * -1 $topY * -1 ($distance * 6) darken($color, 0);
+  inset $topX * -1 $topY * -1 ($distance * 6) $color;
 
   $in: $topX $topY ($distance * 5) rgba(#fff, .2),
   //$topX * -1 $topY * -1 ($distance * 3) darken($color, 0),
-  inset $topX $topY ($distance * 6) rgba(#fff, .6),
-  inset $topX / 2 $topY / 2 ($distance) rgba(#fff, .2),
+  inset $topX $topY ($distance * 6) lighten($color, 20),
+  inset $topX / 2 $topY / 2 ($distance) lighten($color, 40),
   inset $topX * -1 $topY * -1 ($distance * 3) darken($color, 10);
 
   @if $inset {
