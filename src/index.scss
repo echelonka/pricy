@@ -1,4 +1,4 @@
-@import-normalize;
+@import-normalize ;
 
 @import "./assets/styles/variables";
 @import "./assets/styles/spacing";
@@ -14,8 +14,7 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 button {
@@ -25,4 +24,14 @@ button {
 
 ul {
   margin: 0;
+}
+
+a {
+  color: $color-primary;
+  transition: $transition-base;
+  will-change: color;
+
+  &:hover, &:active {
+    color: darken($color-primary, 10);
+  }
 }

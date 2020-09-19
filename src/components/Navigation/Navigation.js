@@ -1,10 +1,13 @@
-import React, {useEffect} from 'react'
+import React, {useContext, useEffect} from 'react'
 import {Link, withRouter, useLocation} from 'react-router-dom'
 import styles from './Navigation.module.scss'
-import SignOut from '../SignOut/SignOut'
-import Container from '../Container'
+import Container from 'components/Container'
+import {ROUTE_CONF} from 'routes'
+import SignOut from 'components/SignOut/SignOut'
+import {AuthUserContext} from 'context/Session'
 
-const Navigation = props => {
+const Navigation = () => {
+  const authUser = useContext(AuthUserContext)
   const location = useLocation()
 
   useEffect(() => {
@@ -14,15 +17,17 @@ const Navigation = props => {
   return (
     <nav className={styles.bar}>
       <Container className={styles.container}>
-        <div/>
+        <div><b>Pricy</b></div>
         <ul className={styles.links}>
           <li>
-            <Link to={'/'}>Home</Link>
+            <Link to={ROUTE_CONF.LANDING}>Home</Link>
           </li>
-          <li>Settings</li>
           <li>
-            <SignOut/>
+            <Link to={ROUTE_CONF.SIGN_IN}>Sign in</Link>
           </li>
+         <li>
+           <SignOut/>
+         </li>
         </ul>
       </Container>
     </nav>

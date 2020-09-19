@@ -1,10 +1,15 @@
-import React, {useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import {Link, withRouter} from 'react-router-dom'
-import {withFirebase} from 'context/withFirebase'
+import {FirebaseContext} from 'context/Firebase'
 import Container from 'components/Container'
 import Card from 'components/Card'
 import FormInput from 'components/FormInput'
 import Button from 'components/Button'
+
+const initialValues = {
+  email: '',
+  password: '',
+}
 
 const SignIn = () => {
   return (
@@ -19,19 +24,25 @@ const SignIn = () => {
 }
 
 const SignInFormBase = props => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const firebase = useContext(FirebaseContext)
+  const [values, setValues] = useState(initialValues)
   const [error, setError] = useState(null)
   const [isDisabled, setDisabled] = useState(true)
 
   useEffect(() => {
+    const {email, password} = values
     setDisabled(!email || !password)
-  }, [email, password])
+  }, [values])
+
+  const handleInputChange = ({target: {name, value}}) => {
+    setValues(prevValues => ({...prevValues, [name]: value}))
+  }
 
   const onSubmit = async event => {
     event.preventDefault()
     try {
-      await props.firebase.signInWithEmailAndPassword(email, password)
+      const {email, password} = values
+      await firebase.signInWithEmailAndPassword(email, password)
       props.history.push('/dashboard')
     } catch (e) {
       setError(e)
@@ -42,17 +53,19 @@ const SignInFormBase = props => {
     <form onSubmit={onSubmit}>
       <FormInput
         className={'mb-2'}
-        onChange={event => setEmail(event.target.value)}
+        onChange={handleInputChange}
         placeholder={'Email Address'}
+        name={'email'}
         type={'text'}
-        value={email}
+        value={values.email}
       />
       <FormInput
         className={'mb-2'}
-        onChange={event => setPassword(event.target.value)}
+        onChange={handleInputChange}
         placeholder={'Password'}
+        name={'password'}
         type={'password'}
-        value={password}
+        value={values.password}
       />
       {error && <p className={'text-error'}>{error.message}</p>}
       <Button
@@ -68,7 +81,7 @@ const SignInFormBase = props => {
   )
 }
 
-const SignInForm = withRouter(withFirebase(SignInFormBase))
+const SignInForm = withRouter(SignInFormBase)
 
 const SignUpLink = () => {
   return (

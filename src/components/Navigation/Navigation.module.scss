@@ -2,7 +2,7 @@
 @import "../../assets/styles/mixins";
 
 .bar {
-  padding: 10px 0;
+  padding: 20px 0;
 }
 
 .container {
@@ -13,4 +13,12 @@
 .links {
   display: flex;
   list-style: none;
+
+  li {
+    margin-left: 20px;
+  }
+
+  a {
+    text-decoration: none;
+  }
 }

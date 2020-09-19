@@ -11,30 +11,6 @@ $input-placeholder-color: $gray-600;
 $input-hover-border-color: darken($input-border-color, 15);
 
 .container {
-  width: calc(100% - 4px);
-  position: relative;
-
-  &::before, &::after {
-    content: '';
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: $input-border-radius;
-    z-index: -1;
-  }
-
-  &::before {
-    margin: -2px;
-    background: linear-gradient(145deg, $white 20%, #D0D9E2);
-  }
-
-  &::after {
-    margin: -1px;
-    background-color: $color-light;
-  }
 }
 
 .input {
@@ -47,11 +23,17 @@ $input-hover-border-color: darken($input-border-color, 15);
   color: $input-color;
   border: none;
   border-radius: $input-border-radius;
-  background-color: darken($color-light, 2);
+  background-color: transparent;
   line-height: 1.5;
-  @include neumorphism($color-light, false, topleft, true);
+  transition: $transition-base;
+  will-change: box-shadow;
+  @include neumorphism($color-light, false, topleft, true, .05rem);
 
   &::placeholder {
     color: $input-placeholder-color;
+  }
+
+  &:focus {
+    @include neumorphism($color-light, false, topleft, true, .1rem);
   }
 }

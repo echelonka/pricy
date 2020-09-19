@@ -1,10 +1,17 @@
-import React, {useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import {Link, withRouter} from 'react-router-dom'
-import {withFirebase} from 'context/withFirebase'
+import {FirebaseContext} from 'context/Firebase'
 import Container from 'components/Container'
 import FormInput from 'components/FormInput'
 import Button from 'components/Button'
 import Card from 'components/Card'
+
+const initialValues = {
+  username: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+}
 
 const SignUp = () => {
   return (
@@ -19,21 +26,25 @@ const SignUp = () => {
 }
 
 const SignUpFormBase = props => {
-  const [username, setUsername] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
+  const firebase = useContext(FirebaseContext)
+  const [values, setValues] = useState(initialValues)
   const [isDisabled, setDisabled] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
+    const {username, email, password, confirmPassword} = values
     setDisabled(password !== confirmPassword || !password || !email || !username)
-  }, [username, email, password, confirmPassword])
+  }, [values])
+
+  const handleInputChange = ({target: {name, value}}) => {
+    setValues(prevValues => ({...prevValues, [name]: value}))
+  }
 
   const onSubmit = async event => {
     event.preventDefault()
     try {
-      await props.firebase.createUserWithEmailAndPassword(email, password)
+      const {email, password} = values
+      await firebase.createUserWithEmailAndPassword(email, password)
       props.history.push('/dashboard')
     } catch (e) {
       setError(e)
@@ -44,35 +55,40 @@ const SignUpFormBase = props => {
     <form onSubmit={onSubmit}>
       <FormInput
         className={'mb-2'}
-        onChange={event => setUsername(event.target.value)}
+        onChange={handleInputChange}
         placeholder={'Full Name'}
+        name={'username'}
         type={'text'}
-        value={username}
+        value={values.username}
       />
       <FormInput
         className={'mb-2'}
-        onChange={event => setEmail(event.target.value)}
+        onChange={handleInputChange}
         placeholder={'Email Address'}
+        name={'email'}
         type={'text'}
-        value={email}
+        value={values.email}
       />
       <FormInput
         className={'mb-2'}
-        onChange={event => setPassword(event.target.value)}
+        onChange={handleInputChange}
         placeholder={'Password'}
+        name={'password'}
         type={'password'}
-        value={password}
+        value={values.password}
       />
       <FormInput
         className={'mb-2'}
-        onChange={event => setConfirmPassword(event.target.value)}
+        onChange={handleInputChange}
         placeholder={'Confirm Password'}
+        name={'confirmPassword'}
         type={'password'}
-        value={confirmPassword}
+        value={values.confirmPassword}
       />
       {error && <p className={'text-error'}>{error.message}</p>}
       <Button
         block
+        className={'mt-4'}
         disabled={isDisabled}
         type={'submit'}
         color={'success'}
@@ -81,7 +97,7 @@ const SignUpFormBase = props => {
   )
 }
 
-const SignUpForm = withRouter(withFirebase(SignUpFormBase))
+const SignUpForm = withRouter(SignUpFormBase)
 
 const SignInLink = () => {
   return (

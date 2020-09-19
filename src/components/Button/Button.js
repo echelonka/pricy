@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import styles from './Button.module.scss'
 
-const Button = props => {
+const Button = React.memo(props => {
   const {block, className, children, color, ...attrs} = props
   const classNames = classnames(
     className,
@@ -19,7 +19,7 @@ const Button = props => {
       </div>
     </button>
   )
-}
+})
 
 Button.propTypes = {
   block: PropTypes.bool,
