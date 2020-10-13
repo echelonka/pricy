@@ -28,7 +28,6 @@
   $direction: topleft,
   $inset: false,
   $distance: .1rem,
-  $border: false
 ) {
   $topX: ($distance * 2 * -1);
   $topY: ($distance * 2 * -1);

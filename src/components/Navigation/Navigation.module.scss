@@ -22,3 +22,12 @@
     text-decoration: none;
   }
 }
+
+.logo {
+  text-decoration: none;
+  color: inherit;
+
+  &:hover {
+    color: inherit;
+  }
+}

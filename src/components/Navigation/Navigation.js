@@ -1,5 +1,5 @@
-import React, {useContext, useEffect} from 'react'
-import {Link, withRouter, useLocation} from 'react-router-dom'
+import React, {useContext} from 'react'
+import {Link, withRouter} from 'react-router-dom'
 import styles from './Navigation.module.scss'
 import Container from 'components/Container'
 import {ROUTE_CONF} from 'routes'
@@ -8,29 +8,33 @@ import {AuthUserContext} from 'context/Session'
 
 const Navigation = () => {
   const authUser = useContext(AuthUserContext)
-  const location = useLocation()
-
-  useEffect(() => {
-    console.log(location)
-  }, [location])
 
   return (
     <nav className={styles.bar}>
       <Container className={styles.container}>
-        <div><b>Pricy</b></div>
+        <div><Logo isLoggedIn={!!authUser}/></div>
         <ul className={styles.links}>
-          <li>
-            <Link to={ROUTE_CONF.LANDING}>Home</Link>
-          </li>
-          <li>
-            <Link to={ROUTE_CONF.SIGN_IN}>Sign in</Link>
-          </li>
-         <li>
-           <SignOut/>
-         </li>
+          {!authUser ? (
+            <li>
+              <Link to={ROUTE_CONF.SIGN_IN}>Sign in</Link>
+            </li>
+          ) : (
+            <li>
+              <SignOut/>
+            </li>
+          )}
         </ul>
       </Container>
     </nav>
+  )
+}
+
+const Logo = props => {
+  const {isLoggedIn} = props
+  const path = isLoggedIn ? ROUTE_CONF.DASHBOARD : ROUTE_CONF.LANDING
+
+  return (
+    <Link className={styles.logo} to={path}><b>Pricy</b></Link>
   )
 }
 

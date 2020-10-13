@@ -43,8 +43,9 @@ const SignUpFormBase = props => {
   const onSubmit = async event => {
     event.preventDefault()
     try {
-      const {email, password} = values
+      const {username, email, password} = values
       await firebase.createUserWithEmailAndPassword(email, password)
+      await firebase.updateProfile({displayName: username})
       props.history.push('/dashboard')
     } catch (e) {
       setError(e)

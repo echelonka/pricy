@@ -20,5 +20,7 @@ export default class Firebase {
 
   signInWithEmailAndPassword = (email, password) => this.auth.signInWithEmailAndPassword(email, password)
 
+  updateProfile = profile => this.auth.currentUser.updateProfile(profile)
+
   signOut = () => this.auth.signOut()
 }

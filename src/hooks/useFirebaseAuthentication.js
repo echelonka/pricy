@@ -5,6 +5,9 @@ const useFirebaseAuthentication = firebase => {
 
   useEffect(() => {
     const authStateListener = firebase.auth.onAuthStateChanged(authUser => {
+      if (authUser) localStorage.setItem('expectSignIn', '1')
+      else localStorage.removeItem('expectSignIn')
+
       setAuthUser(authUser)
     })
     return () => authStateListener()
