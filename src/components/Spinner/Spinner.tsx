@@ -3,7 +3,11 @@ import PropTypes from 'prop-types'
 import classname from 'classnames'
 import styles from './Spinner.module.scss'
 
-const Spinner = props => {
+type Props = {
+  fullPage?: boolean,
+}
+
+const Spinner = (props: Props) => {
   const {fullPage} = props
   const containerClassNames = classname(
     styles.spinner,

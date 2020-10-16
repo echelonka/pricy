@@ -6,7 +6,11 @@ import {ROUTE_CONF} from 'routes'
 import SignOut from 'components/SignOut/SignOut'
 import {AuthUserContext} from 'context/Session'
 
-const Navigation = () => {
+type LogoProps = {
+  isLoggedIn: boolean,
+}
+
+const Navigation: React.FC = () => {
   const authUser = useContext(AuthUserContext)
 
   return (
@@ -29,7 +33,7 @@ const Navigation = () => {
   )
 }
 
-const Logo = props => {
+const Logo = (props: LogoProps) => {
   const {isLoggedIn} = props
   const path = isLoggedIn ? ROUTE_CONF.DASHBOARD : ROUTE_CONF.LANDING
 

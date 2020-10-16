@@ -3,7 +3,14 @@ import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import styles from './Container.module.scss'
 
-const Container = props => {
+type NewProps = {
+  children: React.ReactNode,
+  className?: string,
+}
+
+type Props = NewProps & Omit<React.ComponentProps<'div'>, keyof NewProps>
+
+const Container = (props: Props) => {
   const {children, className, ...attrs} = props
   const classNames = classnames(
     className,
@@ -14,7 +21,7 @@ const Container = props => {
 }
 
 Container.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 }
 
 export default Container

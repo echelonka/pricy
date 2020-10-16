@@ -6,7 +6,7 @@ import {AuthUserContext} from 'context/Session'
 import Navigation from 'components/Navigation/Navigation'
 import useFirebaseAuthentication from 'hooks/useFirebaseAuthentication'
 
-const App = () => {
+const App: React.FC = () => {
   const firebase = useContext(FirebaseContext)
   const authUser = useFirebaseAuthentication(firebase)
 

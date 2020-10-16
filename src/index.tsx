@@ -5,7 +5,7 @@ import App from './pages/App'
 import Firebase from './api/Firebase'
 import FirebaseContext from './context/Firebase/context'
 
-const render = Component => {
+const render = (Component: React.ComponentType) => {
   return ReactDOM.render(
     <React.StrictMode>
       <FirebaseContext.Provider value={new Firebase()}>

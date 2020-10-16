@@ -1,17 +1,18 @@
-import React, {useContext, useEffect, useState} from 'react'
-import {Link, withRouter} from 'react-router-dom'
+import React, {ChangeEvent, FormEvent, useContext, useEffect, useState} from 'react'
+import {Link, RouteComponentProps, withRouter} from 'react-router-dom'
 import {FirebaseContext} from 'context/Firebase'
 import Container from 'components/Container'
 import Card from 'components/Card'
 import FormInput from 'components/FormInput'
 import Button from 'components/Button'
+import {ROUTE_CONF} from 'routes'
 
 const initialValues = {
   email: '',
   password: '',
 }
 
-const SignIn = () => {
+const SignIn: React.FC = () => {
   return (
     <Container>
       <Card className={'mt-4 mb-4 ml-auto mr-auto'} style={{maxWidth: '500px'}}>
@@ -23,10 +24,10 @@ const SignIn = () => {
   )
 }
 
-const SignInFormBase = props => {
+const SignInFormBase: React.FC<RouteComponentProps> = props => {
   const firebase = useContext(FirebaseContext)
   const [values, setValues] = useState(initialValues)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState<Error | null>(null)
   const [isDisabled, setDisabled] = useState(true)
 
   useEffect(() => {
@@ -34,16 +35,16 @@ const SignInFormBase = props => {
     setDisabled(!email || !password)
   }, [values])
 
-  const handleInputChange = ({target: {name, value}}) => {
+  const handleInputChange = ({target: {name, value}}: ChangeEvent<HTMLInputElement>) => {
     setValues(prevValues => ({...prevValues, [name]: value}))
   }
 
-  const onSubmit = async event => {
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     try {
       const {email, password} = values
-      await firebase.signInWithEmailAndPassword(email, password)
-      props.history.push('/dashboard')
+      await firebase?.signInWithEmailAndPassword(email, password)
+      props.history.push(ROUTE_CONF.DASHBOARD)
     } catch (e) {
       setError(e)
     }

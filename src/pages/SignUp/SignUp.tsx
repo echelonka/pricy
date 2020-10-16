@@ -1,5 +1,5 @@
-import React, {useContext, useEffect, useState} from 'react'
-import {Link, withRouter} from 'react-router-dom'
+import React, {ChangeEvent, FormEvent, useContext, useEffect, useState} from 'react'
+import {Link, RouteComponentProps, withRouter} from 'react-router-dom'
 import {FirebaseContext} from 'context/Firebase'
 import Container from 'components/Container'
 import FormInput from 'components/FormInput'
@@ -25,27 +25,27 @@ const SignUp = () => {
   )
 }
 
-const SignUpFormBase = props => {
+const SignUpFormBase: React.FC<RouteComponentProps> = props => {
   const firebase = useContext(FirebaseContext)
   const [values, setValues] = useState(initialValues)
   const [isDisabled, setDisabled] = useState(true)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
     const {username, email, password, confirmPassword} = values
     setDisabled(password !== confirmPassword || !password || !email || !username)
   }, [values])
 
-  const handleInputChange = ({target: {name, value}}) => {
+  const handleInputChange = ({target: {name, value}}: ChangeEvent<HTMLInputElement>) => {
     setValues(prevValues => ({...prevValues, [name]: value}))
   }
 
-  const onSubmit = async event => {
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     try {
       const {username, email, password} = values
-      await firebase.createUserWithEmailAndPassword(email, password)
-      await firebase.updateProfile({displayName: username})
+      await firebase?.createUserWithEmailAndPassword(email, password)
+      await firebase?.updateProfile({displayName: username})
       props.history.push('/dashboard')
     } catch (e) {
       setError(e)

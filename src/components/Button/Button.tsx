@@ -3,7 +3,16 @@ import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import styles from './Button.module.scss'
 
-const Button = React.memo(props => {
+type NewProps = {
+  block?: boolean,
+  className?: string,
+  color?: 'primary' | 'secondary' | 'success' | 'error' | 'warning' | 'light' | 'dark',
+  children: React.ReactNode,
+}
+
+type Props = NewProps & Omit<React.ComponentProps<'button'>, keyof NewProps>
+
+const Button = (props: Props) => {
   const {block, className, children, color, ...attrs} = props
   const classNames = classnames(
     className,
@@ -19,7 +28,7 @@ const Button = React.memo(props => {
       </div>
     </button>
   )
-})
+}
 
 Button.propTypes = {
   block: PropTypes.bool,
@@ -35,4 +44,4 @@ Button.propTypes = {
   ]),
 }
 
-export default Button
+export default React.memo(Button)

@@ -3,7 +3,14 @@ import PropTypes from 'prop-types'
 import classname from 'classnames'
 import styles from './Card.module.scss'
 
-const Card = props => {
+type NewProps = {
+  children: React.ReactNode,
+  className?: string,
+}
+
+type Props = NewProps & Omit<React.ComponentProps<'div'>, keyof NewProps>
+
+const Card = (props: Props) => {
   const {children, className, ...attrs} = props
   const classNames = classname(
     className,

@@ -1,9 +1,15 @@
 import React from 'react'
-import {Route, Switch} from 'react-router-dom'
+import {Route, RouteComponentProps, Switch} from 'react-router-dom'
 import Landing from 'pages/Landing'
 import SignIn from 'pages/SignIn'
 import SignUp from 'pages/SignUp'
 import Dashboard from 'pages/Dashboard'
+
+type RouteConf = {
+  path: string,
+  component: React.ComponentType<RouteComponentProps>,
+  exact?: boolean,
+}
 
 export const ROUTE_CONF = {
   LANDING: '/',
@@ -12,7 +18,7 @@ export const ROUTE_CONF = {
   SIGN_UP: '/sign-up',
 }
 
-const routes = [
+const routes: RouteConf[] = [
   {
     path: ROUTE_CONF.SIGN_UP,
     component: SignUp,
@@ -34,7 +40,7 @@ const routes = [
 
 const Routes = () => (
   <Switch>
-    {routes.map((route, i) => (
+    {routes.map((route: RouteConf, i: number) => (
       <Route
         key={i}
         path={route.path}
