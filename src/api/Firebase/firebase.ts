@@ -1,5 +1,6 @@
 import app from 'firebase/app'
 import 'firebase/auth'
+import 'firebase/firestore'
 
 type UserProfile = {
   displayName?: string | null,
@@ -14,11 +15,13 @@ const config = {
 }
 
 export default class Firebase {
-  public auth: app.auth.Auth;
+  readonly auth: app.auth.Auth
+  readonly db: app.firestore.Firestore
 
   constructor() {
     app.initializeApp(config)
     this.auth = app.auth()
+    this.db = app.firestore()
   }
 
   // *** Auth API ***
@@ -31,10 +34,15 @@ export default class Firebase {
     return this.auth.signInWithEmailAndPassword(email, password)
   }
 
-  // TODO Fix type
   updateProfile = (profile: UserProfile) => {
-    return (this.auth as any).currentUser.updateProfile(profile)
+    return this.auth.currentUser!.updateProfile(profile)
   }
 
   signOut = () => this.auth.signOut()
+
+  // *** User API ***
+
+  get walletsCollection() {
+    return this.db.collection(`users/${this.auth.currentUser?.uid}/wallets`)
+  }
 }

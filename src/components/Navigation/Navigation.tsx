@@ -1,5 +1,5 @@
-import React, {useContext} from 'react'
-import {Link, withRouter} from 'react-router-dom'
+import React, {useContext, useEffect, useState} from 'react'
+import {Link, RouteComponentProps, withRouter} from 'react-router-dom'
 import styles from './Navigation.module.scss'
 import Container from 'components/Container'
 import {ROUTE_CONF} from 'routes'
@@ -10,14 +10,25 @@ type LogoProps = {
   isLoggedIn: boolean,
 }
 
-const Navigation: React.FC = () => {
+const Navigation: React.FC<RouteComponentProps> = props => {
   const authUser = useContext(AuthUserContext)
+  const {pathname} = props.location
+  const [loggedInLanding, setLoggedInLanding] = useState(false)
+
+  useEffect(() => {
+    setLoggedInLanding(!!authUser && pathname === ROUTE_CONF.LANDING)
+  }, [authUser, pathname])
 
   return (
     <nav className={styles.bar}>
       <Container className={styles.container}>
         <div><Logo isLoggedIn={!!authUser}/></div>
         <ul className={styles.links}>
+          {loggedInLanding ? (
+            <Link to={ROUTE_CONF.DASHBOARD}>Dashboard</Link>
+          ) : authUser ? (
+            <Link to={ROUTE_CONF.LANDING}>Home</Link>
+          ) : null}
           {!authUser ? (
             <li>
               <Link to={ROUTE_CONF.SIGN_IN}>Sign in</Link>

@@ -1,8 +1,11 @@
 import React from 'react'
+import Container from 'components/Container'
 
 const Landing = () => {
   return (
-    <div>Landing</div>
+    <Container>
+      <div>Landing</div>
+    </Container>
   )
 }
 

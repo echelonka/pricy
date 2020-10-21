@@ -44,8 +44,8 @@ const SignUpFormBase: React.FC<RouteComponentProps> = props => {
     event.preventDefault()
     try {
       const {username, email, password} = values
-      await firebase?.createUserWithEmailAndPassword(email, password)
-      await firebase?.updateProfile({displayName: username})
+      await firebase!.createUserWithEmailAndPassword(email, password)
+      await firebase!.updateProfile({displayName: username})
       props.history.push('/dashboard')
     } catch (e) {
       setError(e)

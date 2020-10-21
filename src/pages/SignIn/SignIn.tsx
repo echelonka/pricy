@@ -43,7 +43,7 @@ const SignInFormBase: React.FC<RouteComponentProps> = props => {
     event.preventDefault()
     try {
       const {email, password} = values
-      await firebase?.signInWithEmailAndPassword(email, password)
+      await firebase!.signInWithEmailAndPassword(email, password)
       props.history.push(ROUTE_CONF.DASHBOARD)
     } catch (e) {
       setError(e)

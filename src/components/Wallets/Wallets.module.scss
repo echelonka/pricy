@@ -1,0 +1,21 @@
+@import "../../assets/styles/variables";
+@import "../../assets/styles/mixins";
+
+.container {
+  display: grid;
+  grid-gap: 2rem;
+
+  @include phones() {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @include laptop() {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.card {
+  padding: 1rem;
+  border-radius: 1rem;
+  @include neumorphism($color-light, false, topleft, false, .2rem);
+}
