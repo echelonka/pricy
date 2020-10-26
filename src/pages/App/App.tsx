@@ -14,7 +14,9 @@ const App: React.FC = () => {
     <AuthUserContext.Provider value={authUser}>
       <Router>
         <Navigation/>
-        <Routes/>
+        <main>
+          <Routes/>
+        </main>
       </Router>
     </AuthUserContext.Provider>
   )

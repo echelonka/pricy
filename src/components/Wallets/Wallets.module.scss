@@ -1,9 +1,19 @@
 @import "../../assets/styles/variables";
 @import "../../assets/styles/mixins";
 
+$card-background: $color-light;
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .container {
+  margin-top: 1.25rem;
   display: grid;
-  grid-gap: 2rem;
+  grid-column-gap: 3rem;
+  grid-row-gap: 2.5rem;
 
   @include phones() {
     grid-template-columns: 1fr 1fr;
@@ -15,7 +25,41 @@
 }
 
 .card {
-  padding: 1rem;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
   border-radius: 1rem;
-  @include neumorphism($color-light, false, topleft, false, .2rem);
+  overflow: hidden;
+  @include neumorphism($card-background, false, topleft, false, .5rem);
+}
+
+.balance {
+  background: linear-gradient(to right, darken($color-success, 10), $color-success);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.symbol {
+  width: 50px;
+  margin-right: 1.5rem;
+  font-size: 5rem;
+  font-weight: bold;
+  color: $card-background;
+  text-shadow: 0 0 1rem darken($card-background, 20);
+  user-select: none;
+  position: relative;
+  white-space: nowrap;
+  letter-spacing: -.2rem;
+  z-index: -1;
+
+  &::after {
+    width: 250%;
+    height: calc(100% + 10px);
+    top: -5px;
+    right: -250%;
+    content: '';
+    display: block;
+    position: absolute;
+    background-image: linear-gradient(to left, $card-background, rgba($card-background, 0));
+  }
 }

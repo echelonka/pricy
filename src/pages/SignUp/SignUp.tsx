@@ -67,7 +67,7 @@ const SignUpFormBase: React.FC<RouteComponentProps> = props => {
         onChange={handleInputChange}
         placeholder={'Email Address'}
         name={'email'}
-        type={'text'}
+        type={'email'}
         value={values.email}
       />
       <FormInput

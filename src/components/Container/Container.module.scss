@@ -1,7 +1,7 @@
 @import "../../assets/styles/mixins";
 
 .Container {
-  width: calc(100vw - 30px);
+  width: calc(100vw - 60px);
   margin: 0 auto;
 
   @include phones() {

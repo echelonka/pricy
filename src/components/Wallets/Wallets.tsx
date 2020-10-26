@@ -1,29 +1,30 @@
-import React, {useContext, useEffect, useState} from 'react'
+import React from 'react'
 import styles from './Wallets.module.scss'
+import classname from 'classnames'
 import ContentLoader from 'react-content-loader'
-import {FirebaseContext} from 'context/Firebase'
 import {Wallet} from 'types'
 import WalletCard from './Wallet'
+import Button from 'components/Button/Button'
 
-const Wallets = () => {
-  const firebase = useContext(FirebaseContext)
-  const [loading, setLoading] = useState(true)
-  const [wallets, setWallets] = useState<Wallet[]>([])
+type NewProps = {
+  loading: boolean,
+  wallets: Wallet[],
+}
 
-  useEffect(() => {
-    const walletsListener = firebase!.walletsCollection.onSnapshot(snapshot => {
-      setWallets(snapshot.docs.map(wallet => ({
-        id: wallet.id,
-        ...wallet.data(),
-      } as Wallet)))
-      setLoading(false)
-    })
-    return () => walletsListener()
-  }, [firebase])
+type Props = NewProps & Omit<React.ComponentProps<'section'>, keyof NewProps>
+
+const Wallets = (props: Props) => {
+  const {loading, wallets, className, ...attrs} = props
+  const classNames = classname(
+    className,
+  )
 
   return (
-    <>
-      <h2>Wallets</h2>
+    <section className={classNames} {...attrs}>
+      <header className={styles.header}>
+        <h2>Wallets</h2>
+        <Button>+ Add Wallet</Button>
+      </header>
       <div className={styles.container}>
         {loading ? (
           <>
@@ -35,15 +36,15 @@ const Wallets = () => {
           wallets.map(wallet => <WalletCard key={wallet.id} {...wallet} />)
         )}
       </div>
-    </>
+    </section>
   )
 }
 
 const WalletLoader = () => {
   return (
-    <div className={styles.card}>
+    <article className={styles.card}>
       <ContentLoader
-        height={85}
+        height={90}
         gradientRatio={.75}
         backgroundColor={'#fff'}
         backgroundOpacity={.5}
@@ -54,7 +55,7 @@ const WalletLoader = () => {
         <rect x="0" y="35" rx="4" ry="4" width="200" height="15"/>
         <rect x="0" y="65" rx="4" ry="4" width="100" height="20"/>
       </ContentLoader>
-    </div>
+    </article>
   )
 }
 

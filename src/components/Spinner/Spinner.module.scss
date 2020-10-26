@@ -2,6 +2,7 @@
 @import "../../assets/styles/mixins";
 
 @mixin spinner-animation($i, $scale, $delay) {
+  transform: scale(0);
   animation-name: spinner-animation-#{$i};
   animation-duration: 4s;
   animation-timing-function: $ease-in-out-circ;
