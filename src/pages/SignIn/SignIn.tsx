@@ -1,11 +1,13 @@
 import React, {ChangeEvent, FormEvent, useContext, useEffect, useState} from 'react'
-import {Link, RouteComponentProps, withRouter} from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
+import {Trans, useTranslation} from 'react-i18next'
 import {FirebaseContext} from 'context/Firebase'
 import Container from 'components/Container'
 import Card from 'components/Card'
 import FormInput from 'components/FormInput'
 import Button from 'components/Button'
 import {ROUTE_CONF} from 'routes'
+import usePathLocalization from 'hooks/usePathLocalization'
 
 const initialValues = {
   email: '',
@@ -13,10 +15,12 @@ const initialValues = {
 }
 
 const SignIn: React.FC = () => {
+  const {t} = useTranslation()
+
   return (
     <Container>
       <Card className={'mt-4 mb-4 ml-auto mr-auto'} style={{maxWidth: '500px'}}>
-        <h2>Sign In</h2>
+        <h2>{t('signIn')}</h2>
         <SignInForm/>
       </Card>
       <SignUpLink/>
@@ -24,11 +28,14 @@ const SignIn: React.FC = () => {
   )
 }
 
-const SignInFormBase: React.FC<RouteComponentProps> = props => {
+const SignInForm: React.FC = () => {
   const firebase = useContext(FirebaseContext)
+  const history = useHistory()
   const [values, setValues] = useState(initialValues)
   const [error, setError] = useState<Error | null>(null)
   const [isDisabled, setDisabled] = useState(true)
+  const {t} = useTranslation()
+  const dashboardPath = usePathLocalization(ROUTE_CONF.DASHBOARD)
 
   useEffect(() => {
     const {email, password} = values
@@ -42,11 +49,14 @@ const SignInFormBase: React.FC<RouteComponentProps> = props => {
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     try {
+      setDisabled(true)
       const {email, password} = values
       await firebase!.signInWithEmailAndPassword(email, password)
-      props.history.push(ROUTE_CONF.DASHBOARD)
+      history.push(dashboardPath)
     } catch (e) {
       setError(e)
+    } finally {
+      setDisabled(false)
     }
   }
 
@@ -55,7 +65,7 @@ const SignInFormBase: React.FC<RouteComponentProps> = props => {
       <FormInput
         className={'mb-2'}
         onChange={handleInputChange}
-        placeholder={'Email Address'}
+        placeholder={t('emailAddress')}
         name={'email'}
         type={'email'}
         value={values.email}
@@ -63,7 +73,7 @@ const SignInFormBase: React.FC<RouteComponentProps> = props => {
       <FormInput
         className={'mb-2'}
         onChange={handleInputChange}
-        placeholder={'Password'}
+        placeholder={t('password')}
         name={'password'}
         type={'password'}
         value={values.password}
@@ -76,18 +86,20 @@ const SignInFormBase: React.FC<RouteComponentProps> = props => {
         className={'mt-4'}
         color={'success'}
       >
-        Sign In
+        {t('signIn')}
       </Button>
     </form>
   )
 }
 
-const SignInForm = withRouter(SignInFormBase)
-
 const SignUpLink = () => {
+  const signUpPath = usePathLocalization(ROUTE_CONF.SIGN_UP)
+
   return (
     <p className={'text-center'}>
-      Don't have an account yet? <Link className={'text-primary'} to={'/sign-up'}>Sign up</Link>
+      <Trans i18nKey={'accountNotExist'}>
+        Don't have an account yet? <Link className={'text-primary'} to={signUpPath}>Sign up</Link>
+      </Trans>
     </p>
   )
 }

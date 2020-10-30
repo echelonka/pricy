@@ -1,5 +1,6 @@
 import React from 'react'
-import {Route, RouteComponentProps, Switch} from 'react-router-dom'
+import {Redirect, Route, RouteComponentProps, Switch} from 'react-router-dom'
+import {fallbackLng, supportedLngs} from 'i18n'
 import Landing from 'pages/Landing'
 import SignIn from 'pages/SignIn'
 import SignUp from 'pages/SignUp'
@@ -12,10 +13,10 @@ type RouteConf = {
 }
 
 export const ROUTE_CONF = {
-  LANDING: '/',
-  DASHBOARD: '/dashboard',
-  SIGN_IN: '/sign-in',
-  SIGN_UP: '/sign-up',
+  LANDING: '/:lang',
+  DASHBOARD: '/:lang/dashboard',
+  SIGN_IN: '/:lang/sign-in',
+  SIGN_UP: '/:lang/sign-up',
 }
 
 const routes: RouteConf[] = [
@@ -44,9 +45,17 @@ const Routes = () => (
       <Route
         key={i}
         path={route.path}
-        render={props => (<route.component {...props} />)}
+        exact={route.exact}
+        render={props => (
+          supportedLngs.includes(props.match.params.lang) ? (
+            <route.component {...props} />
+          ) : (
+            <Redirect to={`/${fallbackLng}/`}/>
+          )
+        )}
       />
     ))}
+    <Redirect from={'/'} to={`/${fallbackLng}/`}/>
   </Switch>
 )
 

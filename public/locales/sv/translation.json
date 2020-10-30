@@ -1,0 +1,15 @@
+{
+  "signIn": "Logga In",
+  "signOut": "Logga Ut",
+  "signUp": "Registrera dig",
+  "emailAddress": "E-postadress",
+  "password": "Lösenord",
+  "confirmPassword": "Bekräfta Lösenord",
+  "fullName": "Fullständigt Namn",
+  "accountExists": "Har du ett konto? <1>Logga in</1>",
+  "accountNotExist": "Har du inget konto? <1>Registrera dig</1>",
+  "dashboard": "Översikt",
+  "home": "Hem",
+  "wallets": "Plånböcker",
+  "addWallet": "Add Wallet"
+}

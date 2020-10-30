@@ -1,6 +1,8 @@
 @import "../../assets/styles/variables";
 
 .button {
+  // TODO Move to navigation component
+  margin-left: 10px;
   font-size: 1rem;
   padding: 0;
   cursor: pointer;

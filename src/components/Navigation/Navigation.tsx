@@ -1,56 +1,90 @@
 import React, {useContext, useEffect, useState} from 'react'
-import {Link, RouteComponentProps, withRouter} from 'react-router-dom'
+import {Link, useLocation} from 'react-router-dom'
 import styles from './Navigation.module.scss'
 import Container from 'components/Container'
 import {ROUTE_CONF} from 'routes'
 import SignOut from 'components/SignOut/SignOut'
+import Button from 'components/Button/Button'
 import {AuthUserContext} from 'context/Session'
+import {useTranslation} from 'react-i18next'
+import {supportedLngs} from 'i18n'
+import usePathLocalization from 'hooks/usePathLocalization'
+import {ReactComponent as PricyLogo} from 'assets/img/pricy_logo_transparent.svg'
 
 type LogoProps = {
   isLoggedIn: boolean,
 }
 
-const Navigation: React.FC<RouteComponentProps> = props => {
+const Navigation: React.FC = () => {
   const authUser = useContext(AuthUserContext)
-  const {pathname} = props.location
+  const {pathname} = useLocation()
   const [loggedInLanding, setLoggedInLanding] = useState(false)
+  const {t} = useTranslation()
+  const dashboardPath = usePathLocalization(ROUTE_CONF.DASHBOARD)
+  const landingPath = usePathLocalization(ROUTE_CONF.LANDING)
+  const signInPath = usePathLocalization(ROUTE_CONF.SIGN_IN)
 
   useEffect(() => {
-    setLoggedInLanding(!!authUser && pathname === ROUTE_CONF.LANDING)
+    setLoggedInLanding(!!authUser && pathname === landingPath)
   }, [authUser, pathname])
 
   return (
-    <nav className={styles.bar}>
+    <header className={styles.bar}>
       <Container className={styles.container}>
-        <div><Logo isLoggedIn={!!authUser}/></div>
-        <ul className={styles.links}>
+        <div className={styles.left}>
+          <Logo isLoggedIn={!!authUser}/>
+          <Languages/>
+        </div>
+        <nav className={styles.links}>
           {loggedInLanding ? (
-            <Link to={ROUTE_CONF.DASHBOARD}>Dashboard</Link>
+            <Link to={dashboardPath}>{t('dashboard')}</Link>
           ) : authUser ? (
-            <Link to={ROUTE_CONF.LANDING}>Home</Link>
+            <Link to={landingPath}>{t('home')}</Link>
           ) : null}
           {!authUser ? (
-            <li>
-              <Link to={ROUTE_CONF.SIGN_IN}>Sign in</Link>
-            </li>
+            <Link to={signInPath}>{t('signIn')}</Link>
           ) : (
-            <li>
-              <SignOut/>
-            </li>
+            <SignOut/>
           )}
-        </ul>
+        </nav>
       </Container>
-    </nav>
+    </header>
   )
 }
 
 const Logo = (props: LogoProps) => {
   const {isLoggedIn} = props
-  const path = isLoggedIn ? ROUTE_CONF.DASHBOARD : ROUTE_CONF.LANDING
+  const path = usePathLocalization(isLoggedIn ? ROUTE_CONF.DASHBOARD : ROUTE_CONF.LANDING)
 
   return (
-    <Link className={styles.logo} to={path}><b>Pricy</b></Link>
+    <Link className={styles.logo} to={path}>
+      <PricyLogo/>
+      <b>Pricy</b>
+    </Link>
   )
 }
 
-export default withRouter(Navigation)
+const Languages = () => {
+  const {i18n} = useTranslation()
+
+  const changeLanguage = async (lang: string) => {
+    await i18n.changeLanguage(lang)
+  }
+
+  return (
+    <div className={styles.languages}>
+      {supportedLngs.map(lang => (
+        <Button
+          key={lang}
+          onClick={() => changeLanguage(lang)}
+          className={'mr-1'}
+          small
+        >
+          {lang.toUpperCase()}
+        </Button>
+      ))}
+    </div>
+  )
+}
+
+export default Navigation

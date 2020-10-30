@@ -1,9 +1,9 @@
 import {useEffect, useState} from 'react'
 import {FirebaseContextType} from 'context/Firebase/context'
-import {User} from 'firebase'
+import firebase from 'firebase'
 
 const useFirebaseAuthentication = (firebase: FirebaseContextType) => {
-  const [authUser, setAuthUser] = useState<User | null>(null)
+  const [authUser, setAuthUser] = useState<firebase.User | null>(null)
 
   useEffect(() => {
     if (!firebase) return

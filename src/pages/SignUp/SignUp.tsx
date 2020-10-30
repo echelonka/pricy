@@ -1,10 +1,13 @@
 import React, {ChangeEvent, FormEvent, useContext, useEffect, useState} from 'react'
-import {Link, RouteComponentProps, withRouter} from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
+import {Trans, useTranslation} from 'react-i18next'
 import {FirebaseContext} from 'context/Firebase'
 import Container from 'components/Container'
 import FormInput from 'components/FormInput'
 import Button from 'components/Button'
 import Card from 'components/Card'
+import {ROUTE_CONF} from 'routes'
+import usePathLocalization from 'hooks/usePathLocalization'
 
 const initialValues = {
   username: '',
@@ -14,10 +17,12 @@ const initialValues = {
 }
 
 const SignUp = () => {
+  const {t} = useTranslation()
+
   return (
     <Container>
       <Card className={'mt-4 mb-4 ml-auto mr-auto'} style={{maxWidth: '500px'}}>
-        <h2>Sign Up</h2>
+        <h2>{t('signUp')}</h2>
         <SignUpForm/>
       </Card>
       <SignInLink/>
@@ -25,11 +30,14 @@ const SignUp = () => {
   )
 }
 
-const SignUpFormBase: React.FC<RouteComponentProps> = props => {
+const SignUpForm: React.FC = () => {
   const firebase = useContext(FirebaseContext)
+  const history = useHistory()
   const [values, setValues] = useState(initialValues)
   const [isDisabled, setDisabled] = useState(true)
   const [error, setError] = useState<Error | null>(null)
+  const {t} = useTranslation()
+  const dashboardPath = usePathLocalization(ROUTE_CONF.DASHBOARD)
 
   useEffect(() => {
     const {username, email, password, confirmPassword} = values
@@ -43,12 +51,15 @@ const SignUpFormBase: React.FC<RouteComponentProps> = props => {
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     try {
+      setDisabled(true)
       const {username, email, password} = values
       await firebase!.createUserWithEmailAndPassword(email, password)
       await firebase!.updateProfile({displayName: username})
-      props.history.push('/dashboard')
+      history.push(dashboardPath)
     } catch (e) {
       setError(e)
+    } finally {
+      setDisabled(false)
     }
   }
 
@@ -57,7 +68,7 @@ const SignUpFormBase: React.FC<RouteComponentProps> = props => {
       <FormInput
         className={'mb-2'}
         onChange={handleInputChange}
-        placeholder={'Full Name'}
+        placeholder={t('fullName')}
         name={'username'}
         type={'text'}
         value={values.username}
@@ -65,7 +76,7 @@ const SignUpFormBase: React.FC<RouteComponentProps> = props => {
       <FormInput
         className={'mb-2'}
         onChange={handleInputChange}
-        placeholder={'Email Address'}
+        placeholder={t('emailAddress')}
         name={'email'}
         type={'email'}
         value={values.email}
@@ -73,7 +84,7 @@ const SignUpFormBase: React.FC<RouteComponentProps> = props => {
       <FormInput
         className={'mb-2'}
         onChange={handleInputChange}
-        placeholder={'Password'}
+        placeholder={t('password')}
         name={'password'}
         type={'password'}
         value={values.password}
@@ -81,7 +92,7 @@ const SignUpFormBase: React.FC<RouteComponentProps> = props => {
       <FormInput
         className={'mb-2'}
         onChange={handleInputChange}
-        placeholder={'Confirm Password'}
+        placeholder={t('confirmPassword')}
         name={'confirmPassword'}
         type={'password'}
         value={values.confirmPassword}
@@ -93,17 +104,19 @@ const SignUpFormBase: React.FC<RouteComponentProps> = props => {
         disabled={isDisabled}
         type={'submit'}
         color={'success'}
-      >Sign Up</Button>
+      >{t('signUp')}</Button>
     </form>
   )
 }
 
-const SignUpForm = withRouter(SignUpFormBase)
-
 const SignInLink = () => {
+  const signInPath = usePathLocalization(ROUTE_CONF.SIGN_IN)
+
   return (
     <p className={'text-center'}>
-      Already have an account? <Link className={'text-primary'} to={'/sign-in'}>Sign in</Link>
+      <Trans i18nKey={'accountExists'}>
+        Already have an account? <Link className={'text-primary'} to={signInPath}>Sign in</Link>
+      </Trans>
     </p>
   )
 }

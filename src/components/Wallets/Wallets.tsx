@@ -5,6 +5,7 @@ import ContentLoader from 'react-content-loader'
 import {Wallet} from 'types'
 import WalletCard from './Wallet'
 import Button from 'components/Button/Button'
+import {useTranslation} from 'react-i18next'
 
 type NewProps = {
   loading: boolean,
@@ -18,12 +19,13 @@ const Wallets = (props: Props) => {
   const classNames = classname(
     className,
   )
+  const {t} = useTranslation()
 
   return (
     <section className={classNames} {...attrs}>
       <header className={styles.header}>
-        <h2>Wallets</h2>
-        <Button>+ Add Wallet</Button>
+        <h2>{t('wallets')}</h2>
+        <Button>+ {t('addWallet')}</Button>
       </header>
       <div className={styles.container}>
         {loading ? (

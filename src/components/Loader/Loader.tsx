@@ -1,13 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classname from 'classnames'
-import styles from './Spinner.module.scss'
+import styles from './Loader.module.scss'
 
 type Props = {
   fullPage?: boolean,
 }
 
-const Spinner = (props: Props) => {
+const Loader = (props: Props) => {
   const {fullPage} = props
   const containerClassNames = classname(
     styles.spinner,
@@ -31,11 +31,11 @@ const Circle = () => {
   )
 }
 
-Spinner.propTypes = {
+Loader.propTypes = {
   /**
    * Defines whether the spinner should be full page or not.
    */
   fullPage: PropTypes.bool,
 }
 
-export default Spinner
+export default Loader

@@ -1,7 +1,7 @@
 import React from 'react'
-import {User} from 'firebase'
+import firebase from 'firebase'
 
-export type AuthUserContextType = User | null
+export type AuthUserContextType = firebase.User | null
 
 const AuthUserContext = React.createContext<AuthUserContextType>(null)
 

@@ -43,6 +43,12 @@ $button-font-size-active: .87rem;
   }
 }
 
+.small {
+  .inner {
+    padding: .25rem .5rem;
+  }
+}
+
 .block {
   width: 100%;
   display: block;

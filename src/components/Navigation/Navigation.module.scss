@@ -2,23 +2,30 @@
 @import "../../assets/styles/mixins";
 
 .bar {
-  padding: 20px 0;
+  padding: 15px 0;
 }
 
 .container {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+}
+
+.languages {
+  margin-left: .5rem;
 }
 
 .links {
   display: flex;
-  list-style: none;
-
-  li {
-    margin-left: 20px;
-  }
 
   a {
+    display: inline-block;
+    margin-left: 20px;
     text-decoration: none;
   }
 }
@@ -26,6 +33,14 @@
 .logo {
   text-decoration: none;
   color: inherit;
+  display: flex;
+  align-items: center;
+
+  // TODO Fix logo positioning
+  svg {
+    margin-left: -11px;
+    width: 45px;
+  }
 
   &:hover {
     color: inherit;

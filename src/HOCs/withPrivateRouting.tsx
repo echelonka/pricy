@@ -2,7 +2,7 @@ import React, {useContext} from 'react'
 import {Redirect} from 'react-router-dom'
 import {AuthUserContext} from 'context/Session'
 import {ROUTE_CONF} from 'routes'
-import Spinner from 'components/Spinner'
+import Loader from 'components/Loader'
 
 const withPrivateRouting = <P,>(Component: React.ComponentType<P>) => {
   return (props: any) => {
@@ -11,7 +11,7 @@ const withPrivateRouting = <P,>(Component: React.ComponentType<P>) => {
     return authUser !== null
       ? <Component {...props as P}/>
       : localStorage.getItem('expectSignIn')
-        ? <Spinner fullPage/>
+        ? <Loader fullPage/>
         : <Redirect to={ROUTE_CONF.SIGN_IN}/>
   }
 }

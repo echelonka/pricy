@@ -8,17 +8,19 @@ type NewProps = {
   className?: string,
   color?: 'primary' | 'secondary' | 'success' | 'error' | 'warning' | 'light' | 'dark',
   children: React.ReactNode,
+  small?: boolean,
 }
 
 type Props = NewProps & Omit<React.ComponentProps<'button'>, keyof NewProps>
 
 const Button = (props: Props) => {
-  const {block, className, children, color, ...attrs} = props
+  const {block, className, children, color, small, ...attrs} = props
   const classNames = classnames(
     className,
     styles.button,
     block && styles.block,
     color && styles[color],
+    small && styles.small,
   )
 
   return (
@@ -42,6 +44,7 @@ Button.propTypes = {
     'light',
     'dark',
   ]),
+  small: PropTypes.bool,
 }
 
 export default React.memo(Button)

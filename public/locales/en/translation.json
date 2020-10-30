@@ -1,0 +1,15 @@
+{
+  "signIn": "Sign In",
+  "signOut": "Sign Out",
+  "signUp": "Sign Up",
+  "emailAddress": "Email Address",
+  "password": "Password",
+  "confirmPassword": "Confirm Password",
+  "fullName": "Full Name",
+  "accountExists": "Already have an account? <1>Sign in</1>",
+  "accountNotExist": "Don't have an account yet? <1>Sign up</1>",
+  "dashboard": "Dashboard",
+  "home": "Home",
+  "wallets": "Wallets",
+  "addWallet": "Add Wallet"
+}
