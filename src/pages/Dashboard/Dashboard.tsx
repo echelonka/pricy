@@ -1,9 +1,12 @@
 import React, {useContext, useEffect, useState} from 'react'
 import withPrivateRouting from 'HOCs/withPrivateRouting'
+import {ExchangerateContext} from 'context/Exchangerate'
 import Container from 'components/Container'
 import Wallets from 'components/Wallets'
+import Overview from 'components/Overview'
 import {FirebaseContext} from 'context/Firebase'
 import {Wallet} from 'types'
+import Exchangerate from 'api/Exchangerate'
 
 const Dashboard = () => {
   const firebase = useContext(FirebaseContext)
@@ -22,19 +25,20 @@ const Dashboard = () => {
   }, [firebase])
 
   return (
-    <Container>
-      <Wallets
-        className={'mt-2'}
-        loading={loading}
-        wallets={wallets}
-      />
-      <section
-        className={'mt-2'}
-      >
-        <h2>Overview</h2>
-        <p>Chart</p>
-      </section>
-    </Container>
+    <ExchangerateContext.Provider value={new Exchangerate()}>
+      <Container>
+        <Wallets
+          className={'mt-2'}
+          loading={loading}
+          wallets={wallets}
+        />
+        <Overview
+          className={'mt-4'}
+          loading={loading}
+          wallets={wallets}
+        />
+      </Container>
+    </ExchangerateContext.Provider>
   )
 }
 

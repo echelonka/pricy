@@ -26,7 +26,7 @@ const Navigation: React.FC = () => {
 
   useEffect(() => {
     setLoggedInLanding(!!authUser && pathname === landingPath)
-  }, [authUser, pathname])
+  }, [authUser, landingPath, pathname])
 
   return (
     <header className={styles.bar}>

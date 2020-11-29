@@ -11,5 +11,6 @@
   "dashboard": "Översikt",
   "home": "Hem",
   "wallets": "Plånböcker",
-  "addWallet": "Add Wallet"
+  "addWallet": "Ny Plånbok",
+  "overview": "Översikt"
 }

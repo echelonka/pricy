@@ -11,5 +11,6 @@
   "dashboard": "Dashboard",
   "home": "Home",
   "wallets": "Wallets",
-  "addWallet": "Add Wallet"
+  "addWallet": "Add Wallet",
+  "overview": "Overview"
 }
