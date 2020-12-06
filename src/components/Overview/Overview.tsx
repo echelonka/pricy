@@ -1,34 +1,21 @@
 import React, {ChangeEvent, useContext, useEffect, useMemo, useState} from 'react'
 import classname from 'classnames'
 import {useTranslation} from 'react-i18next'
-import {TimeSeriesRequest, TimeSeriesResponse, Wallet} from 'types'
+import {ChartDataItem, Timeframe, TimeSeriesRequest, TimeSeriesResponse, UserData, Wallet} from 'types'
 import {ExchangerateContext} from 'context/Exchangerate'
-import {Area, AreaChart, ResponsiveContainer, Tooltip, XAxis} from 'recharts'
+import ButtonGroup from '../ButtonGroup'
+import Button from '../Button/Button'
+import Chart from './Chart'
+import {timeframeData} from '../../constants/timeframeData'
+import {FirebaseContext} from '../../context/Firebase'
+import currenciesList from 'assets/currencies.json'
+// import cryptocurrenciesList from 'assets/cryptocurrencies.json'
 
 type NewProps = {
   loading: boolean,
   wallets: Wallet[],
 }
 type Props = NewProps & Omit<React.ComponentProps<'section'>, keyof NewProps>
-type Timeframe = 'total' | 'month' | 'week'
-
-const timeframeData = {
-  total: {
-    offset: 365,
-    tickInterval: 30,
-    tickFormatter: (date: string) => new Date(date).toDateString().slice(4, 7)
-  },
-  month: {
-    offset: 30,
-    tickInterval: 5,
-    tickFormatter: (date: string) => new Date(date).toDateString().slice(4, 10)
-  },
-  week: {
-    offset: 7,
-    tickInterval: 0,
-    tickFormatter: (date: string) => new Date(date).toDateString().slice(4, 10)
-  }
-}
 
 const Overview = (props: Props) => {
   const {className, loading, wallets} = props
@@ -36,9 +23,10 @@ const Overview = (props: Props) => {
     className,
   )
   const {t} = useTranslation()
+  const firebase = useContext(FirebaseContext)
   const exchangerate = useContext(ExchangerateContext)
   const [timeSeriesResponse, setTimeSeriesResponse] = useState<TimeSeriesResponse | null>(null)
-  const baseCurrency: string = 'UAH'
+  const [baseCurrency, setBaseCurrency] = useState<string | undefined>(undefined)
   const [timeframe, setTimeframe] = useState<Timeframe>('week')
   const currencies: string[] = useMemo(() => {
     return wallets.reduce((currencies: string[], {currency}) => {
@@ -51,7 +39,7 @@ const Overview = (props: Props) => {
     wallets.forEach(({balance, currency}) => currenciesBalance.set(currency, balance))
     return currenciesBalance
   }, [wallets])
-  const data: any[] = useMemo(() => {
+  const data: ChartDataItem[] = useMemo(() => {
     if (!timeSeriesResponse) return []
     return Object.keys(timeSeriesResponse.rates).reduce((newData: any[], date) => {
       newData.push({
@@ -65,6 +53,13 @@ const Overview = (props: Props) => {
       return newData
     }, [])
   }, [currenciesBalance, timeSeriesResponse])
+
+  useEffect(() => {
+    const userDataListener = firebase!.userData.onSnapshot(snapshot => {
+      setBaseCurrency((snapshot.data() as UserData).base_currency)
+    })
+    return () => userDataListener()
+  }, [firebase])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -87,43 +82,46 @@ const Overview = (props: Props) => {
     if (wallets.length) fetchData()
   }, [baseCurrency, currencies, exchangerate, timeframe, wallets])
 
-  const changeTimeframe = ({target: {value}}: ChangeEvent<HTMLSelectElement>) => setTimeframe(value as Timeframe)
+  const changeBaseCurrency = async ({target: {value}}: ChangeEvent<HTMLSelectElement>) => {
+    await firebase!.updateUserData({base_currency: value})
+  }
 
   return (
     <section
       className={classNames}
     >
       <h2>{t('overview')}</h2>
-      <p>Base currency is <b>{baseCurrency}</b></p>
-      <p>Time frame is <b>{timeframe}</b></p>
-      <select name={'timeframe'} value={timeframe} onChange={changeTimeframe}>
-        {Object.keys(timeframeData).map(key => (
-          <option value={key} key={key}>{key}</option>
-        ))}
-      </select>
+      <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap'}}>
+        <p>
+          <select name="base_currency" id="base_currency" value={baseCurrency} onChange={changeBaseCurrency}>
+            <optgroup label={'General currencies'}>
+              {Object.values(currenciesList).map(({code, name}) => (
+                <option key={code} value={code}>{name}</option>
+              ))}
+            </optgroup>
+            {/*<optgroup label={'Cryptocurrencies'}>*/}
+            {/*  {Object.keys(cryptocurrenciesList).map(key => (*/}
+            {/*    <option key={key} value={key}>{(cryptocurrenciesList as any)[key].name}</option>*/}
+            {/*  ))}*/}
+            {/*</optgroup>*/}
+          </select>
+        </p>
+        <ButtonGroup>
+          {Object.keys(timeframeData).map(key => (
+            <Button
+              key={key}
+              onClick={() => setTimeframe(key as Timeframe)}
+              active={timeframe === key}
+            >
+              {t(key)}
+            </Button>
+          ))}
+        </ButtonGroup>
+      </div>
       {loading ? (
         <ChartLoader/>
       ) : (
-        <ResponsiveContainer width={'100%'} height={300}>
-          <AreaChart width={600} height={400} data={data}>
-            <defs>
-              <linearGradient id={'balance-gradient'} x1={0} y1={0} x2={0} y2={1}>
-                <stop offset={'5%'} stopColor={'#8884d8'} stopOpacity={0.8}/>
-                <stop offset={'95%'} stopColor={'#8884d8'} stopOpacity={0}/>
-              </linearGradient>
-            </defs>
-            <Area type={'monotone'} dataKey={'value'} stroke={'#8884d8'} strokeWidth={3} fill={'url(#balance-gradient)'}/>
-            <Tooltip/>
-            <XAxis
-              interval={timeframeData[timeframe].tickInterval}
-              dataKey={'date'}
-              axisLine={false}
-              padding={{left: 20, right: 20}}
-              tickLine={false}
-              tickFormatter={timeframeData[timeframe].tickFormatter}
-            />
-          </AreaChart>
-        </ResponsiveContainer>
+        <Chart data={data} timeframe={timeframe} />
       )}
     </section>
   )

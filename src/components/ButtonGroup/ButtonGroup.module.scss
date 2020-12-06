@@ -1,0 +1,12 @@
+@import "../../assets/styles/variables";
+@import "../../assets/styles/mixins";
+
+.group {
+  display: inline-block;
+  border-radius: $border-radius;
+  @include neumorphism($color-light, false, topleft);
+
+  > button {
+    box-shadow: none;
+  }
+}

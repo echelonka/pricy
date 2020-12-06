@@ -34,7 +34,7 @@ $button-font-size-active: .87rem;
     background-color: darken($color-light, 4);
   }
 
-  &:active:not(:disabled) {
+  &:active:not(:disabled), &.active {
     font-size: $button-font-size-active;
 
     .inner {

@@ -1,10 +1,11 @@
 import app from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
+import {UserData} from '../../types'
 
 type UserProfile = {
-  displayName?: string | null,
-  photoURL?: string | null,
+  displayName: string | null,
+  photoURL: string | null,
 }
 
 const config = {
@@ -15,8 +16,8 @@ const config = {
 }
 
 export default class Firebase {
-  readonly auth: app.auth.Auth
-  readonly db: app.firestore.Firestore
+  public readonly auth: app.auth.Auth
+  private readonly db: app.firestore.Firestore
 
   constructor() {
     app.initializeApp(config)
@@ -34,7 +35,7 @@ export default class Firebase {
     return this.auth.signInWithEmailAndPassword(email, password)
   }
 
-  updateProfile = (profile: UserProfile) => {
+  updateProfile = (profile: Partial<UserProfile>) => {
     return this.auth.currentUser!.updateProfile(profile)
   }
 
@@ -44,5 +45,13 @@ export default class Firebase {
 
   get walletsCollection() {
     return this.db.collection(`users/${this.auth.currentUser?.uid}/wallets`)
+  }
+
+  get userData() {
+    return this.db.doc(`users/${this.auth.currentUser?.uid}`)
+  }
+
+  updateUserData = (userData: Partial<UserData>) => {
+    return this.userData.update(userData)
   }
 }

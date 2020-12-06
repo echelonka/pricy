@@ -9,6 +9,10 @@ const detection = {
 
 export const fallbackLng = 'en'
 export const supportedLngs = ['en', 'sv']
+export const locales: Record<string, string> = {
+  en: 'en-US',
+  sv: 'sv-SE',
+}
 
 i18next
   .use(I18NextHttpBackend)

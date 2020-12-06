@@ -12,5 +12,8 @@
   "home": "Home",
   "wallets": "Wallets",
   "addWallet": "Add Wallet",
-  "overview": "Overview"
+  "overview": "Overview",
+  "week": "Week",
+  "month": "Month",
+  "total": "Total"
 }

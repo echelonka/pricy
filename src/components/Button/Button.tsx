@@ -4,6 +4,7 @@ import classnames from 'classnames'
 import styles from './Button.module.scss'
 
 type NewProps = {
+  active?: boolean,
   block?: boolean,
   className?: string,
   color?: 'primary' | 'secondary' | 'success' | 'error' | 'warning' | 'light' | 'dark',
@@ -14,10 +15,11 @@ type NewProps = {
 type Props = NewProps & Omit<React.ComponentProps<'button'>, keyof NewProps>
 
 const Button = (props: Props) => {
-  const {block, className, children, color, small, ...attrs} = props
+  const {active, block, className, children, color, small, ...attrs} = props
   const classNames = classnames(
     className,
     styles.button,
+    active && styles.active,
     block && styles.block,
     color && styles[color],
     small && styles.small,

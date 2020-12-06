@@ -11,15 +11,15 @@ export default class Exchangerate {
 
   private makeRequest = async <T, R>(url: string, request?: R): Promise<T> => {
     const params = new URLSearchParams(request as any).toString()
-    const response = await fetch(`${url}?${params}`)
+    const response = await fetch(`${this.api}${url}?${params}`)
     return await response.json()
   }
 
   convertCurrency = async (request: ConvertRequest) => {
-    return await this.makeRequest<ConvertResponse, ConvertRequest>(`${this.api}/convert`, request)
+    return await this.makeRequest<ConvertResponse, ConvertRequest>('/convert', request)
   }
 
   getTimeSeries = async (request: TimeSeriesRequest) => {
-    return await this.makeRequest<TimeSeriesResponse, TimeSeriesRequest>(`${this.api}/timeseries`, request)
+    return await this.makeRequest<TimeSeriesResponse, TimeSeriesRequest>('/timeseries', request)
   }
 }

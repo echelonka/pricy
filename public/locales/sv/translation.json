@@ -12,5 +12,8 @@
   "home": "Hem",
   "wallets": "Plånböcker",
   "addWallet": "Ny Plånbok",
-  "overview": "Översikt"
+  "overview": "Översikt",
+  "week": "Vecka",
+  "month": "Månad",
+  "total": "Total"
 }

@@ -1,5 +1,9 @@
 import firebase from 'firebase'
 
+export type UserData = {
+  base_currency: string,
+}
+
 export type Wallet = {
   name: string,
   balance: number,
@@ -101,4 +105,11 @@ export type TimeSeriesResponse = {
   rates: Record<string, Record<string, number>>,
   timeseries: boolean,
   success: boolean,
+}
+
+export type Timeframe = 'week' | 'month' | 'total'
+
+export type ChartDataItem = {
+  date: string,
+  value: number,
 }

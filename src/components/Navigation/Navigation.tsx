@@ -25,7 +25,7 @@ const Navigation: React.FC = () => {
   const signInPath = usePathLocalization(ROUTE_CONF.SIGN_IN)
 
   useEffect(() => {
-    setLoggedInLanding(!!authUser && pathname === landingPath)
+    setLoggedInLanding(!!authUser && pathname.split('/').join('') === landingPath.split('/').join(''))
   }, [authUser, landingPath, pathname])
 
   return (

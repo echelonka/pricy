@@ -33,7 +33,7 @@ const Dashboard = () => {
           wallets={wallets}
         />
         <Overview
-          className={'mt-4'}
+          className={'mt-5'}
           loading={loading}
           wallets={wallets}
         />
