@@ -17,10 +17,10 @@ const Chart = (props: Props) => {
   const {i18n} = useTranslation()
   const tickFormatter = (date: string) => {
     const {language} = i18n
-    const options: Intl.DateTimeFormatOptions = {
-      month: 'short',
-    }
-    if (timeframe !== 'total') options.day = '2-digit'
+    let options: Intl.DateTimeFormatOptions = {}
+    if (timeframe === 'week') options = {weekday: 'short'}
+    else if (timeframe === 'month') options = {month: 'short', day: '2-digit'}
+    else if (timeframe === 'total') options = {month: 'short'}
     return new Intl.DateTimeFormat(locales[language], options).format(new Date(date))
   }
 

@@ -1,0 +1,7 @@
+@import "./variables";
+
+.recharts {
+  &-default-tooltip {
+    border-radius: $border-radius;
+  }
+}
