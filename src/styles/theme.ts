@@ -64,6 +64,6 @@ export const lightTheme: DefaultTheme = {
 export const darkTheme: DefaultTheme = {
   ...commonTheme,
   background: '#1d1f23',
-  text: '#324c5b',
+  text: '#ffffff',
   success: '#17c671',
 }

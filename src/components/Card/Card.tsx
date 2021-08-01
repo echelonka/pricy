@@ -1,32 +1,24 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import classname from 'classnames'
-import styles from './Card.module.scss'
+import styled from 'styled-components'
 
-type NewProps = {
-  children: React.ReactNode,
-  className?: string,
-}
+type NewProps = React.ComponentPropsWithoutRef<'div'>
 
-type Props = NewProps & Omit<React.ComponentProps<'div'>, keyof NewProps>
-
-const Card = (props: Props) => {
+const Card = (props: NewProps) => {
   const {children, className, ...attrs} = props
   const classNames = classname(
     className,
-    styles.card,
   )
 
   return (
-    <div {...attrs} className={classNames}>{children}</div>
+    <StyledCard {...attrs} className={classNames}>{children}</StyledCard>
   )
 }
 
-Card.propTypes = {
-  /**
-   * The card custom class name.
-   */
-  className: PropTypes.string,
-}
+const StyledCard = styled.div<NewProps>`
+  padding: 1.875rem;
+  border-radius: 1.5rem;
+  position: relative;
+`
 
 export default Card
