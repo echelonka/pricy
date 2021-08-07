@@ -15,5 +15,6 @@
   "overview": "Overview",
   "week": "Week",
   "month": "Month",
-  "total": "Total"
+  "total": "Total",
+  "baseCurrency": "Base currency"
 }

@@ -1,15 +1,18 @@
-import React, {ChangeEvent, useContext, useEffect, useMemo, useState} from 'react'
+import React, {useContext, useEffect, useMemo, useState} from 'react'
 import classname from 'classnames'
+import styled from 'styled-components'
 import {useTranslation} from 'react-i18next'
 import {ChartDataItem, Timeframe, TimeSeriesRequest, TimeSeriesResponse, UserData, Wallet} from 'types'
 import {ExchangerateContext} from 'context/Exchangerate'
-import ButtonGroup from '../ButtonGroup'
-import Button from '../Button/Button'
-import Chart from './Chart'
 import {timeframeData} from '../../constants/timeframeData'
 import {FirebaseContext} from '../../context/Firebase'
 import currenciesList from 'assets/currencies.json'
 // import cryptocurrenciesList from 'assets/cryptocurrencies.json'
+// Components
+import Button from '../Button'
+import ButtonGroup from '../ButtonGroup'
+import Chart from './Chart'
+import Dropdown, {DropdownOption} from '../Dropdown'
 
 type NewProps = {
   loading: boolean,
@@ -53,6 +56,16 @@ const Overview = (props: Props) => {
       return newData
     }, [])
   }, [currenciesBalance, timeSeriesResponse])
+  const generalCurrencies = useMemo(() => {
+    return Object.values(currenciesList)
+      .map(({ code, name }) => ({ id: code, name }))
+      .sort((a, b) => {
+        return a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+      })
+  }, [])
+  const selectedCurrency = useMemo(() => {
+    return generalCurrencies.find(({ id }) => id === baseCurrency)
+  }, [baseCurrency, generalCurrencies])
 
   useEffect(() => {
     const userDataListener = firebase!.userData.onSnapshot(snapshot => {
@@ -82,8 +95,8 @@ const Overview = (props: Props) => {
     if (wallets.length) fetchData()
   }, [baseCurrency, currencies, exchangerate, timeframe, wallets])
 
-  const changeBaseCurrency = async ({target: {value}}: ChangeEvent<HTMLSelectElement>) => {
-    await firebase!.updateUserData({base_currency: value})
+  const changeBaseCurrency = async ({ id }: DropdownOption) => {
+    await firebase!.updateUserData({ base_currency: id as string })
   }
 
   return (
@@ -91,21 +104,13 @@ const Overview = (props: Props) => {
       className={classNames}
     >
       <h2>{t('overview')}</h2>
-      <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap'}}>
-        <p>
-          <select name="base_currency" id="base_currency" value={baseCurrency} onChange={changeBaseCurrency}>
-            <optgroup label={'General currencies'}>
-              {Object.values(currenciesList).map(({code, name}) => (
-                <option key={code} value={code}>{name}</option>
-              ))}
-            </optgroup>
-            {/*<optgroup label={'Cryptocurrencies'}>*/}
-            {/*  {Object.keys(cryptocurrenciesList).map(key => (*/}
-            {/*    <option key={key} value={key}>{(cryptocurrenciesList as any)[key].name}</option>*/}
-            {/*  ))}*/}
-            {/*</optgroup>*/}
-          </select>
-        </p>
+      <OverviewTopBar>
+        <Dropdown
+          onChange={changeBaseCurrency}
+          options={generalCurrencies}
+          placeholder={t('baseCurrency')}
+          value={selectedCurrency}
+        />
         <ButtonGroup>
           {Object.keys(timeframeData).map(key => (
             <Button
@@ -117,7 +122,7 @@ const Overview = (props: Props) => {
             </Button>
           ))}
         </ButtonGroup>
-      </div>
+      </OverviewTopBar>
       {loading ? (
         <ChartLoader/>
       ) : (
@@ -132,5 +137,18 @@ const ChartLoader = () => {
     <div>Loading chart...</div>
   )
 }
+
+const OverviewTopBar = styled.div`
+  margin-bottom: 2rem;
+  display: grid;
+  row-gap: 1rem;
+  justify-items: center;
+  
+  ${({ theme }) => theme.breakpoints.phones`
+    grid-template-columns: 200px auto;
+    justify-content: space-between;
+  `}
+`
+OverviewTopBar.displayName = 'OverviewTopBar'
 
 export default Overview

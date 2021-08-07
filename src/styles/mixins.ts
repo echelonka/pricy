@@ -1,4 +1,4 @@
-import {css, ThemedCssFunction, DefaultTheme} from 'styled-components'
+import {css, FlattenInterpolation, ThemedCssFunction, DefaultTheme, ThemeProps} from 'styled-components'
 import {darken, lighten, math, rgba} from 'polished'
 
 // Breakpoints
@@ -35,7 +35,7 @@ export const neumorphism = (
   direction: 'topleft' | 'topcenter' | 'topright' = 'topleft',
   inset: boolean = false,
   distance: string = '0.1rem',
-) => {
+): FlattenInterpolation<ThemeProps<DefaultTheme>> => {
   let topX: string = math(`${distance} * 2 * -1`)
   let topY: string = math(`${distance} * 2 * -1`)
 
@@ -57,17 +57,14 @@ export const neumorphism = (
     inset ${math(`${topX} / 2`)} ${math(`${topY} / 2`)} ${distance} ${lighten(0.4, color)},
     inset ${math(`${topX} * -1`)} ${math(`${topY} * -1`)} ${math(`${distance} * 3`)} ${darken(0.1, color)};
   `
+  const resultingShadow = inset ? inShadow : outShadow
 
-  return css`
-    ${inset ? inShadow : outShadow}
+  return !hover ? resultingShadow : css`
+    transition: box-shadow .3s ease-in-out;
+    will-change: box-shadow;
     
-    ${hover && css`
-      transition: box-shadow .3s ease-in-out;
-      will-change: box-shadow;
-      
-      &:hover {
-        ${inset ? inShadow : outShadow}
-      }
-    `}
+    &:hover {
+      ${resultingShadow}
+    }
   `
 }

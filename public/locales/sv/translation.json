@@ -15,5 +15,6 @@
   "overview": "Översikt",
   "week": "Vecka",
   "month": "Månad",
-  "total": "Total"
+  "total": "Total",
+  "baseCurrency": "Basvaluta"
 }

@@ -1,21 +1,22 @@
 import React from 'react'
-import classnames from 'classnames'
 import styled, {css} from 'styled-components'
 import {darken, mix} from 'polished'
+import { ButtonContent } from './styled'
+
+type ButtonColor = 'primary' | 'secondary' | 'success' | 'error' | 'warning' | 'light' | 'dark'
 
 interface NewProps extends React.ComponentPropsWithoutRef<'button'> {
   active?: boolean,
   block?: boolean,
-  color?: 'primary' | 'secondary' | 'success' | 'error' | 'warning' | 'light' | 'dark',
+  color?: ButtonColor,
   small?: boolean,
 }
 
-const Button = (props: NewProps) => {
+const Button: React.FC<NewProps> = (props: NewProps) => {
   const {active, className, children, ...attrs} = props
-  const classNames = classnames(className, active && 'active')
 
   return (
-    <StyledButton {...attrs} className={classNames}>
+    <StyledButton {...attrs} active={active} className={className}>
       <ButtonContent>
         {children}
       </ButtonContent>
@@ -23,32 +24,26 @@ const Button = (props: NewProps) => {
   )
 }
 
-const ButtonContent = styled.div`
-  width: 100%;
-  height: 100%;
-  padding: .75rem 1.25rem;
-  box-sizing: border-box;
-  border-radius: ${({theme}) => theme.borderRadius};
-  transition: ${({theme}) => theme.baseTransition};
-`
-
 const StyledButton = styled.button<NewProps>`
   padding: .1rem;
   font-weight: 500;
   font-size: .875rem;
   font-family: Poppins, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   cursor: pointer;
-  border-radius: ${({theme}) => theme.borderRadius};
   border: none;
   line-height: 1.125;
   -webkit-tap-highlight-color: transparent;
   outline: none;
   user-select: none;
-  color: ${({theme}) => theme.text};
   letter-spacing: .05rem;
-  background-color: ${({theme}) => theme.background};
-  transition: ${({theme}) => theme.baseTransition};
-  ${({theme}) => theme.neumorphism(theme.background)};
+  
+  ${({theme}) => css`
+    border-radius: ${theme.borderRadius};
+    color: ${theme.text};
+    background-color: ${theme.background};
+    transition: ${theme.baseTransition};
+    ${theme.neumorphism(theme.background)}
+  `}
   
   ${({small}) => small && css`
     ${ButtonContent} {
@@ -60,6 +55,12 @@ const StyledButton = styled.button<NewProps>`
     width: 100%;
     display: block;
   `}
+  
+  ${({active, theme}) => active && css`
+    ${ButtonContent} {
+      ${theme.neumorphism(theme.background, false, 'topleft', true)}
+    }
+  `}
 
   &:disabled {
     cursor: default;
@@ -68,7 +69,7 @@ const StyledButton = styled.button<NewProps>`
     background-color: ${({theme}) => darken(0.04, theme.background)};
   }
 
-  &:active:not(:disabled), &.active {
+  &:active:not(:disabled) {
     //font-size: .87rem;
 
     ${ButtonContent} {

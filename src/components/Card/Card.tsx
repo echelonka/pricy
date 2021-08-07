@@ -1,17 +1,13 @@
-import React from 'react'
-import classname from 'classnames'
+import React, { PropsWithoutRef } from 'react'
 import styled from 'styled-components'
 
 type NewProps = React.ComponentPropsWithoutRef<'div'>
 
-const Card = (props: NewProps) => {
+const Card: React.FC<NewProps> = (props: PropsWithoutRef<NewProps>) => {
   const {children, className, ...attrs} = props
-  const classNames = classname(
-    className,
-  )
 
   return (
-    <StyledCard {...attrs} className={classNames}>{children}</StyledCard>
+    <StyledCard {...attrs} className={className}>{children}</StyledCard>
   )
 }
 

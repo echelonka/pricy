@@ -4,7 +4,7 @@ import classname from 'classnames'
 import ContentLoader from 'react-content-loader'
 import {Wallet} from 'types'
 import WalletCard from './WalletCard'
-import Button from 'components/Button/Button'
+import Button from 'components/Button'
 import {useTranslation} from 'react-i18next'
 
 type NewProps = {
