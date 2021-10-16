@@ -1,6 +1,8 @@
 import React, {ChangeEvent, FormEvent, useContext, useEffect, useState} from 'react'
 import {Link, useHistory} from 'react-router-dom'
 import {Trans, useTranslation} from 'react-i18next'
+import firebase from 'firebase'
+
 import {FirebaseContext} from 'context/Firebase'
 import Container from 'components/Container'
 import Card from 'components/Card'
@@ -8,6 +10,8 @@ import FormInput from 'components/FormInput'
 import Button from 'components/Button'
 import {ROUTE_CONF} from 'routes'
 import usePathLocalization from 'hooks/usePathLocalization'
+
+type AuthError = firebase.auth.Error
 
 const initialValues = {
   email: '',
@@ -32,7 +36,7 @@ const SignInForm: React.FC = () => {
   const firebase = useContext(FirebaseContext)
   const history = useHistory()
   const [values, setValues] = useState(initialValues)
-  const [error, setError] = useState<Error | null>(null)
+  const [error, setError] = useState<AuthError | null>(null)
   const [isDisabled, setDisabled] = useState(true)
   const {t} = useTranslation()
   const dashboardPath = usePathLocalization(ROUTE_CONF.DASHBOARD)
@@ -54,7 +58,7 @@ const SignInForm: React.FC = () => {
       await firebase!.signInWithEmailAndPassword(email, password)
       history.push(dashboardPath)
     } catch (e) {
-      setError(e)
+      setError(e as AuthError)
     } finally {
       setDisabled(false)
     }
