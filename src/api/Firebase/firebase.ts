@@ -1,6 +1,6 @@
-import app from 'firebase/app'
-import 'firebase/auth'
-import 'firebase/firestore'
+import app from 'firebase/compat/app'
+import 'firebase/compat/auth'
+import 'firebase/compat/firestore'
 import {UserData} from '../../types'
 
 type UserProfile = {
@@ -27,25 +27,11 @@ export default class Firebase {
 
   // *** Auth API ***
 
-  createUserWithEmailAndPassword = (email: string, password: string) => {
-    return this.auth.createUserWithEmailAndPassword(email, password)
-  }
-
-  signInWithEmailAndPassword = (email: string, password: string) => {
-    return this.auth.signInWithEmailAndPassword(email, password)
-  }
-
   updateProfile = (profile: Partial<UserProfile>) => {
     return this.auth.currentUser!.updateProfile(profile)
   }
 
-  signOut = () => this.auth.signOut()
-
   // *** User API ***
-
-  get walletsCollection() {
-    return this.db.collection(`users/${this.auth.currentUser?.uid}/wallets`)
-  }
 
   get userData() {
     return this.db.doc(`users/${this.auth.currentUser?.uid}`)

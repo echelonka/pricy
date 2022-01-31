@@ -1,14 +1,14 @@
-import React, {useContext} from 'react'
+import {ComponentType} from 'react'
 import {Redirect} from 'react-router-dom'
-import {AuthUserContext} from 'context/Session'
+import {useAuth} from 'context/AuthProvider'
 import {ROUTE_CONF} from 'routes'
 import Loader from 'components/Loader'
 
-const withPrivateRouting = <P,>(Component: React.ComponentType<P>) => {
+const withPrivateRouting = <P,>(Component: ComponentType<P>) => {
   return (props: any) => {
-    const authUser = useContext(AuthUserContext)
+    const {currentUser} = useAuth()
 
-    return authUser !== null
+    return currentUser !== null
       ? <Component {...props as P}/>
       : localStorage.getItem('expectSignIn')
         ? <Loader fullPage/>

@@ -1,11 +1,11 @@
-import React, {useContext, useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Link, useLocation} from 'react-router-dom'
 import styles from './Navigation.module.scss'
 import Container from 'components/Container'
 import {ROUTE_CONF} from 'routes'
 import SignOut from 'components/SignOut/SignOut'
 import Button from 'components/Button'
-import {AuthUserContext} from 'context/Session'
+import {useAuth} from 'context/AuthProvider'
 import {useTranslation} from 'react-i18next'
 import {supportedLngs} from 'i18n'
 import usePathLocalization from 'hooks/usePathLocalization'
@@ -16,7 +16,7 @@ type LogoProps = {
 }
 
 const Navigation: React.FC = () => {
-  const authUser = useContext(AuthUserContext)
+  const {currentUser} = useAuth()
   const {pathname} = useLocation()
   const [loggedInLanding, setLoggedInLanding] = useState(false)
   const {t} = useTranslation()
@@ -25,23 +25,23 @@ const Navigation: React.FC = () => {
   const signInPath = usePathLocalization(ROUTE_CONF.SIGN_IN)
 
   useEffect(() => {
-    setLoggedInLanding(!!authUser && pathname.split('/').join('') === landingPath.split('/').join(''))
-  }, [authUser, landingPath, pathname])
+    setLoggedInLanding(!!currentUser && pathname.split('/').join('') === landingPath.split('/').join(''))
+  }, [currentUser, landingPath, pathname])
 
   return (
     <header className={styles.bar}>
       <Container className={styles.container}>
         <div className={styles.left}>
-          <Logo isLoggedIn={!!authUser}/>
+          <Logo isLoggedIn={!!currentUser}/>
           <Languages/>
         </div>
         <nav className={styles.links}>
           {loggedInLanding ? (
             <Link to={dashboardPath}>{t('dashboard')}</Link>
-          ) : authUser ? (
+          ) : currentUser ? (
             <Link to={landingPath}>{t('home')}</Link>
           ) : null}
-          {!authUser ? (
+          {!currentUser ? (
             <Link to={signInPath}>{t('signIn')}</Link>
           ) : (
             <SignOut/>

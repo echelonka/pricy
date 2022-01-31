@@ -1,6 +1,7 @@
 import React from 'react'
 import {Redirect, Route, RouteComponentProps, Switch} from 'react-router-dom'
 import {fallbackLng, supportedLngs} from 'i18n'
+
 import Landing from 'pages/Landing'
 import SignIn from 'pages/SignIn'
 import SignUp from 'pages/SignUp'

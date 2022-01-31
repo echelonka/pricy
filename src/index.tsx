@@ -8,6 +8,7 @@ import App from './pages/App'
 import Firebase from './api/Firebase'
 import FirebaseContext from './context/Firebase/context'
 import Loader from './components/Loader'
+import AppProvider from './context/AppProvider'
 
 const render = (Component: React.ComponentType) => {
   return ReactDOM.render(
@@ -15,9 +16,11 @@ const render = (Component: React.ComponentType) => {
       <ThemeProvider theme={lightTheme}>
         <GlobalStyles />
         <Suspense fallback={<Loader fullPage/>}>
-          <FirebaseContext.Provider value={new Firebase()}>
-            <Component/>
-          </FirebaseContext.Provider>
+          <AppProvider>
+            <FirebaseContext.Provider value={new Firebase()}>
+              <Component/>
+            </FirebaseContext.Provider>
+          </AppProvider>
         </Suspense>
       </ThemeProvider>
     </React.StrictMode>,

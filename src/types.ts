@@ -1,4 +1,4 @@
-import firebase from 'firebase'
+import {Timestamp} from 'firebase/firestore'
 
 export type UserData = {
   base_currency: string,
@@ -7,8 +7,8 @@ export type UserData = {
 export type Wallet = {
   name: string,
   balance: number,
-  created_at: firebase.firestore.Timestamp,
-  updated_at: firebase.firestore.Timestamp,
+  created_at: Timestamp,
+  updated_at: Timestamp,
   currency: string,
   id: string,
 }

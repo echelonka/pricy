@@ -1,20 +1,23 @@
-import React, {useContext, useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
+import {onSnapshot} from 'firebase/firestore'
+
 import withPrivateRouting from 'HOCs/withPrivateRouting'
 import {ExchangerateContext} from 'context/Exchangerate'
+import {useFirestore} from 'context/FirestoreProvider'
+import Exchangerate from 'api/Exchangerate'
+import {Wallet} from 'types'
+
 import Container from 'components/Container'
 import Wallets from 'components/Wallets'
 import Overview from 'components/Overview'
-import {FirebaseContext} from 'context/Firebase'
-import {Wallet} from 'types'
-import Exchangerate from 'api/Exchangerate'
 
 const Dashboard = () => {
-  const firebase = useContext(FirebaseContext)
+  const firestore = useFirestore()
   const [loading, setLoading] = useState(true)
   const [wallets, setWallets] = useState<Wallet[]>([])
 
   useEffect(() => {
-    const walletsListener = firebase!.walletsCollection.onSnapshot(snapshot => {
+    const walletsListener = onSnapshot(firestore.walletsCollection, snapshot => {
       setWallets(snapshot.docs.map(wallet => ({
         id: wallet.id,
         ...wallet.data(),
@@ -22,7 +25,7 @@ const Dashboard = () => {
       setLoading(false)
     })
     return () => walletsListener()
-  }, [firebase])
+  }, [firestore])
 
   return (
     <ExchangerateContext.Provider value={new Exchangerate()}>

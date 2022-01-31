@@ -1,22 +1,26 @@
-import React, {ChangeEvent, FormEvent, useContext, useEffect, useState} from 'react'
+import React, {ChangeEvent, FormEvent, useEffect, useState} from 'react'
 import {Link, useHistory} from 'react-router-dom'
 import {Trans, useTranslation} from 'react-i18next'
-import firebase from 'firebase'
+import { AuthError } from 'firebase/auth'
 
-import {FirebaseContext} from 'context/Firebase'
+import {useAuth} from 'context/AuthProvider'
+import {ROUTE_CONF} from 'routes'
+import usePathLocalization from 'hooks/usePathLocalization'
+
 import Container from 'components/Container'
 import Card from 'components/Card'
 import FormInput from 'components/FormInput'
 import Button from 'components/Button'
-import {ROUTE_CONF} from 'routes'
-import usePathLocalization from 'hooks/usePathLocalization'
 
-type AuthError = firebase.auth.Error
+interface FormValues {
+  email: string;
+  password: string;
+}
 
-const initialValues = {
+const getInitialValues = (): FormValues => ({
   email: '',
   password: '',
-}
+})
 
 const SignIn: React.FC = () => {
   const {t} = useTranslation()
@@ -33,10 +37,10 @@ const SignIn: React.FC = () => {
 }
 
 const SignInForm: React.FC = () => {
-  const firebase = useContext(FirebaseContext)
+  const {signIn} = useAuth()
   const history = useHistory()
-  const [values, setValues] = useState(initialValues)
-  const [error, setError] = useState<AuthError | null>(null)
+  const [values, setValues] = useState<FormValues>(getInitialValues())
+  const [errorMessage, setErrorMessage] = useState<string>('')
   const [isDisabled, setDisabled] = useState(true)
   const {t} = useTranslation()
   const dashboardPath = usePathLocalization(ROUTE_CONF.DASHBOARD)
@@ -55,34 +59,40 @@ const SignInForm: React.FC = () => {
     try {
       setDisabled(true)
       const {email, password} = values
-      await firebase!.signInWithEmailAndPassword(email, password)
+      await signIn(email, password)
       history.push(dashboardPath)
     } catch (e) {
-      setError(e as AuthError)
+      const error = e as AuthError
+      const message = error.message.replace(/Firebase:\s|\s\([^)]+\)./g, '')
+      setErrorMessage(message)
     } finally {
       setDisabled(false)
+    }
+  }
+
+  const bindFieldToForm = (fieldName: keyof FormValues) => {
+    return {
+      onChange: handleInputChange,
+      name: fieldName,
+      value: values[fieldName],
     }
   }
 
   return (
     <form onSubmit={onSubmit}>
       <FormInput
+        {...bindFieldToForm('email')}
         className={'mb-2'}
-        onChange={handleInputChange}
         placeholder={t('emailAddress')}
-        name={'email'}
         type={'email'}
-        value={values.email}
       />
       <FormInput
+        {...bindFieldToForm('password')}
         className={'mb-2'}
-        onChange={handleInputChange}
         placeholder={t('password')}
-        name={'password'}
         type={'password'}
-        value={values.password}
       />
-      {error && <p className={'text-error'}>{error.message}</p>}
+      {errorMessage && <p className={'text-error'}>{errorMessage}</p>}
       <Button
         block
         disabled={isDisabled}
